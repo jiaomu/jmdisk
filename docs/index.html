@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="input" onchange="getInput()">
+    <div id="div"></div>
+    <script>
+      const data = [
+        {
+          name: '123456',
+          value: 18
+        },
+        {
+          name: '123789',
+          value: 19
+        },
+        {
+          name: '456789',
+          value: 20
+        }
+      ]
+      function getInput() {
+          const input = document.getElementById('input').value
+          console.log(input)
+          const div = document.getElementById('div')
+          for (let i = 0; i < data.length; i++) {
+              if(data[i].name.includes(input)) {
+                const p = document.createElement('p')
+                p.innerHTML = data[i].name
+                p.style.color = 'red'
+                p.style.fontSize = '20px'
+                div.appendChild(p);
+
+              }
+          }
+
+      }
+    </script>
+
+</body>
+</html>
+
+
