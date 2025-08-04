@@ -4,37 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body,html {
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+      }
+
+      #div {
+        width: 100%;
+        height: calc(100% - 60px);
+        background-color: #ccc;
+      }
+    </style>
 </head>
 <body>
-    <input type="text" id="input" onchange="getInput()">
+    <input type="text" placeholder="请输入资源名称" style="width: calc(100% - 45px);height: 35px;margin: 10px;padding: 0 10px;" id="input" onchange="getInput()">
     <div id="div"></div>
     <script>
       const data = [
         {
-          name: '123456',
-          value: 18
+          name: '凡人修仙传（4k）',
+          url: 'https://pan.baidu.com/s/1t1ebTgPBq2-yjjpCTOM4Sw?pwd=2ui7 '
         },
         {
-          name: '123789',
-          value: 19
+          name: '地球超新鲜',
+          url: 'https://pan.baidu.com/s/1VMnS7EkgFrrbmJ8itcG5qQ?pwd=zz64 '
         },
         {
-          name: '456789',
-          value: 20
+          name: '深情眼（4k）已完结',
+          url: 'https://pan.baidu.com/s/1QOEqck0HSvg5JP3LYda5pg?pwd=0000'
         }
       ]
       function getInput() {
           const input = document.getElementById('input').value
           console.log(input)
           const div = document.getElementById('div')
+          div.innerHTML = ''
           for (let i = 0; i < data.length; i++) {
               if(data[i].name.includes(input)) {
-                const p = document.createElement('p')
-                p.innerHTML = data[i].name
-                p.style.color = 'red'
-                p.style.fontSize = '20px'
-                div.appendChild(p);
-
+                const div1 = document.createElement('div')
+                const a = document.createElement('a')
+                const span = document.createElement('span')
+                span.innerHTML = data[i].name;
+                a.href = data[i].url;
+                a.innerHTML = '点击跳转';
+                div1.style.color = 'red'
+                div1.style.fontSize = '20px'
+                div1.appendChild(span);
+                div1.appendChild(a);
+                div.appendChild(div1);
               }
           }
 
