@@ -29,7 +29,7 @@
     <script>
       let datas = [];
 
-      fetch('data.json').then(response => response.json()).then(data => {
+      fetch('./data.json').then(response => response.json()).then(data => {
         // 处理数据
         datas = data;
       });
@@ -60,5 +60,6 @@
 
 </body>
 </html>
+
 
 
