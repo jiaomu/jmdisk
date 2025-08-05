@@ -1,1 +1,0 @@
-ALTER TABLE `resource` MODIFY COLUMN `url` varchar(1000) NOT NULL;

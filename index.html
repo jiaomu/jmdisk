@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body,html {
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+      }
+
+      #div {
+        width: 100%;
+        height: calc(100% - 60px);
+        background-color: #ccc;
+      }
+    </style>
+</head>
+<body>
+    <input type="text" placeholder="请输入资源名称" style="width: calc(100% - 45px);height: 35px;margin: 10px;padding: 0 10px;" id="input" onchange="getInput()">
+    <div id="div"></div>
+    <script>
+      let datas = [];
+
+      fetch('./data.json').then(response => response.json()).then(data => {
+        // 处理数据
+        datas = data;
+      });
+      function getInput() {
+          const input = document.getElementById('input').value
+          console.log(input)
+          const div = document.getElementById('div')
+          div.innerHTML = ''
+          for (let i = 0; i < datas.length; i++) {
+              if(datas[i].name.includes(input)) {
+                const div1 = document.createElement('div')
+                const a = document.createElement('a')
+                const span = document.createElement('span')
+                span.innerHTML = datas[i].name;
+                a.href = datas[i].url;
+                a.innerHTML = '点击跳转';
+                div1.style.color = 'red'
+                div1.style.fontSize = '20px';
+                div1.style.padding = '3px 10px';
+                div1.appendChild(span);
+                div1.appendChild(a);
+                div.appendChild(div1);
+              }
+          }
+
+      }
+    </script>
+
+</body>
+</html>
+
+
+

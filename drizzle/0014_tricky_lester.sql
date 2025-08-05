@@ -1,1 +1,0 @@
-ALTER TABLE `resource_disk` MODIFY COLUMN `url` varchar(1000) NOT NULL DEFAULT '';
