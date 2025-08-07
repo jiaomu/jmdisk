@@ -24,6 +24,8 @@
     </style>
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <div id="qrcode"></div>
     <input type="text" placeholder="请输入资源名称" style="width: calc(100% - 45px);height: 35px;margin: 10px;padding: 0 10px;" id="input" onchange="getInput()">
     <div id="div"></div>
     <script>
@@ -32,30 +34,63 @@
       fetch('./data.json').then(response => response.json()).then(data => {
         // 处理数据
         datas = data;
+        init('');
       });
       function getInput() {
           const input = document.getElementById('input').value
           console.log(input)
-          const div = document.getElementById('div')
-          div.innerHTML = ''
-          for (let i = 0; i < datas.length; i++) {
-              if(datas[i].name.includes(input)) {
-                const div1 = document.createElement('div')
-                const a = document.createElement('a')
-                const span = document.createElement('span')
-                span.innerHTML = datas[i].name;
-                a.href = datas[i].url;
-                a.innerHTML = '点击跳转';
-                div1.style.color = 'red'
-                div1.style.fontSize = '14px';
-                div1.style.padding = '3px 10px';
-                div1.appendChild(span);
-                div1.appendChild(a);
-                div.appendChild(div1);
-              }
-          }
-
+          init(input)
       }
+
+      function init(input) {
+        const div = document.getElementById('div')
+        div.innerHTML = ''
+        for (let i = 0; i < datas.length; i++) {
+          if(datas[i].name.includes(input) && input) {
+            const div1 = document.createElement('div')
+            const a = document.createElement('div')
+            const span = document.createElement('span')
+            span.innerHTML = datas[i].name;
+            a.dataset.url = datas[i].url;
+            a.innerHTML = '点击跳转';
+            a.onclick = function() {
+              getQrcode(this.dataset.url)
+            }
+            div1.style.color = 'red'
+            div1.style.fontSize = '14px';
+            div1.style.padding = '3px 10px';
+            div1.appendChild(span);
+            div1.appendChild(a);
+            div.appendChild(div1);
+          }
+          if(!input) {
+            const div1 = document.createElement('div')
+            const a = document.createElement('div')
+            const span = document.createElement('span')
+            span.innerHTML = datas[i].name;
+            a.dataset.url = datas[i].url;
+            a.innerHTML = '点击跳转';
+            a.onclick = function() {
+              getQrcode(this.dataset.url)
+            }
+            div1.style.color = 'red'
+            div1.style.fontSize = '14px';
+            div1.style.padding = '3px 10px';
+            div1.appendChild(span);
+            div1.appendChild(a);
+            div.appendChild(div1);
+          }
+        }
+      }
+
+      function getQrcode(url) {
+        const qrcode = new QRCode(document.getElementById("qrcode"), {
+          text: url,
+          width: 128,
+          height: 128
+        });
+      }
+
     </script>
 
 </body>
