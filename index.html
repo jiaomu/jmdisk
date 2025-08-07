@@ -19,13 +19,36 @@
       #div {
         width: 100%;
         height: calc(100% - 60px);
-        background-color: #ccc;
       }
+      .qrcode-box {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+      }
+      .qrcode-box div {
+        transform: translate(25%, 50%);
+      }
+      .qrcode-box span {
+        display: block;
+        transform: translate(38%, 200%);
+        font-size: 20px;
+        color: red;
+      }
+
     </style>
 </head>
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <div id="qrcode"></div>
+    <script src="./qrcode.js"></script>
+    <div class="qrcode-box">
+      <span onclick="closeQrcode()">X</span>
+      <div id="qrcode"></div>
+    </div>
+    
     <input type="text" placeholder="请输入资源名称" style="width: calc(100% - 45px);height: 35px;margin: 10px;padding: 0 10px;" id="input" onchange="getInput()">
     <div id="div"></div>
     <script>
@@ -48,15 +71,19 @@
         for (let i = 0; i < datas.length; i++) {
           if(datas[i].name.includes(input) && input) {
             const div1 = document.createElement('div')
-            const a = document.createElement('div')
+            const a = document.createElement('span')
             const span = document.createElement('span')
             span.innerHTML = datas[i].name;
             a.dataset.url = datas[i].url;
             a.innerHTML = '点击跳转';
+            a.style.marginLeft = '30px;'
+            a.style.color = 'red'
             a.onclick = function() {
+              const qrcodeBox = document.querySelector('.qrcode-box')
+              qrcodeBox.style.display = 'block'
               getQrcode(this.dataset.url)
             }
-            div1.style.color = 'red'
+            div1.style.color = 'rgb(88 48 48);'
             div1.style.fontSize = '14px';
             div1.style.padding = '3px 10px';
             div1.appendChild(span);
@@ -65,15 +92,19 @@
           }
           if(!input) {
             const div1 = document.createElement('div')
-            const a = document.createElement('div')
+            const a = document.createElement('span')
             const span = document.createElement('span')
             span.innerHTML = datas[i].name;
             a.dataset.url = datas[i].url;
             a.innerHTML = '点击跳转';
+            a.style.marginLeft = '30px;'
+            a.style.color = 'red'
             a.onclick = function() {
+              const qrcodeBox = document.querySelector('.qrcode-box')
+              qrcodeBox.style.display = 'block'
               getQrcode(this.dataset.url)
             }
-            div1.style.color = 'red'
+            div1.style.color = 'rgb(88 48 48);'
             div1.style.fontSize = '14px';
             div1.style.padding = '3px 10px';
             div1.appendChild(span);
@@ -90,6 +121,13 @@
           height: 128
         });
       }
+
+      function closeQrcode() {
+        const qrcodeBox = document.querySelector('.qrcode-box')
+        qrcodeBox.style.display = 'none'
+        document.getElementById("qrcode").innerHTML = '';
+      }
+
 
     </script>
 
