@@ -81,7 +81,11 @@
             a.onclick = function() {
               const qrcodeBox = document.querySelector('.qrcode-box')
               qrcodeBox.style.display = 'block'
-              getQrcode(this.dataset.url)
+              if(isMobile()) {
+                window.open(this.dataset.url)
+              }else{
+                getQrcode(this.dataset.url) 
+              }
             }
             div1.style.color = 'rgb(88 48 48);'
             div1.style.fontSize = '14px';
@@ -128,7 +132,9 @@
         document.getElementById("qrcode").innerHTML = '';
       }
 
-
+      function isMobile() {
+        return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
     </script>
 
 </body>
