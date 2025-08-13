@@ -79,11 +79,11 @@
             a.style.marginLeft = '30px;'
             a.style.color = 'red'
             a.onclick = function() {
-              const qrcodeBox = document.querySelector('.qrcode-box')
-              qrcodeBox.style.display = 'block'
               if(isMobile()) {
                 window.open(this.dataset.url)
               }else{
+                const qrcodeBox = document.querySelector('.qrcode-box')
+                qrcodeBox.style.display = 'block'
                 getQrcode(this.dataset.url) 
               }
             }
@@ -104,11 +104,11 @@
             a.style.marginLeft = '30px;'
             a.style.color = 'red'
             a.onclick = function() {
-              const qrcodeBox = document.querySelector('.qrcode-box')
-              qrcodeBox.style.display = 'block'
               if(isMobile()) {
                 window.open(this.dataset.url)
               }else{
+                const qrcodeBox = document.querySelector('.qrcode-box')
+                qrcodeBox.style.display = 'block'
                 getQrcode(this.dataset.url) 
               }
             }
