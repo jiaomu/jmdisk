@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>焦木看剧</title>
     <style>
       * {
         margin: 0;
@@ -18,7 +18,7 @@
 
       #div {
         width: 100%;
-        height: calc(100% - 60px);
+        height: calc(100% - 140px);
       }
       .qrcode-box {
         width: 100vw;
@@ -48,7 +48,10 @@
       <span onclick="closeQrcode()">X</span>
       <div id="qrcode"></div>
     </div>
-    
+    <div style="height: 80px;text-align: center;">
+      <h3 style="line-height: 50px;">焦木看剧</h3>
+      <span id="total" style="font-size: 13px;">收藏总数</span>
+    </div>
     <input type="text" placeholder="请输入资源名称" style="width: calc(100% - 45px);height: 35px;margin: 10px;padding: 0 10px;" id="input" onchange="getInput()">
     <div id="div"></div>
     <script>
@@ -57,6 +60,8 @@
       fetch('./data.json').then(response => response.json()).then(data => {
         // 处理数据
         datas = data;
+        document.getElementById('total').innerHTML = `收藏总数(${datas.length})`
+
         init('');
       });
       function getInput() {
