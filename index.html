@@ -59,9 +59,8 @@
 
       fetch('./data.json').then(response => response.json()).then(data => {
         // 处理数据
-        datas = data;
+        datas = data.sort((a, b) => b.name.localeCompare(a.name));
         document.getElementById('total').innerHTML = `收藏总数(${datas.length}) &emsp; 资源缺失请+v(chui89520)添加`
-
         init('');
       });
       function getInput() {
