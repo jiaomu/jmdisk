@@ -1,1 +1,0 @@
-ALTER TABLE `resource` DROP INDEX `unique_url`;

@@ -1,1 +1,0 @@
-ALTER TABLE `resource` MODIFY COLUMN `pinyin` varchar(2000) NOT NULL DEFAULT '';
