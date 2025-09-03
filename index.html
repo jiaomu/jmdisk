@@ -69,7 +69,9 @@
 
       fetch('./data.json').then(response => response.json()).then(data => {
         // 处理数据
-        datas = data.sort((a, b) => b.name.localeCompare(a.name));
+        const hot = data.filter(item => item.hot);
+        const notHot = data.filter(item => !item.hot);
+        datas = hot.concat(notHot.sort((a, b) => b.name.localeCompare(a.name)));
         document.getElementById('total').innerHTML = `收藏总数(${datas.length}) &emsp; 资源缺失请+v(chui89520)添加`
         init('');
       });
@@ -89,7 +91,7 @@
             const span = document.createElement('span')
             span.innerHTML = datas[i].name;
             a.dataset.url = datas[i].url;
-            a.innerHTML = '点击跳转';
+            a.innerHTML = '获取资源'+ (datas[i].pan == 'bd' ? '（百度网盘）' : '（夸克网盘）');
             a.style.marginLeft = '30px;'
             a.style.color = 'red'
             a.onclick = function() {
@@ -114,7 +116,7 @@
             const span = document.createElement('span')
             span.innerHTML = datas[i].name;
             a.dataset.url = datas[i].url;
-            a.innerHTML = '点击跳转';
+            a.innerHTML = '获取资源'+ (datas[i].pan == 'bd' ? '（百度网盘）' : '（夸克网盘）');
             a.style.marginLeft = '30px;'
             a.style.color = 'red'
             a.onclick = function() {
