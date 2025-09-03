@@ -72,69 +72,43 @@
         const hot = data.filter(item => item.hot);
         const notHot = data.filter(item => !item.hot);
         datas = hot.concat(notHot.sort((a, b) => b.name.localeCompare(a.name)));
-        document.getElementById('total').innerHTML = `收藏总数(${datas.length}) &emsp; 资源缺失请+v(chui89520)添加`
-        init('');
+        document.getElementById('total').innerHTML = `收藏总数(${datas.length}) &emsp; 资源缺失请+v(chui89520)添加`;
+        showList(datas);
       });
+
       function getInput() {
-          const input = document.getElementById('input').value
-          console.log(input)
-          init(input)
+          const input = document.getElementById('input').value;
+          const list = fuzzySearchJson(datas, input,'name');
+          showList(list);
       }
 
-      function init(input) {
+      function showList(list) {
         const div = document.getElementById('div')
         div.innerHTML = ''
-        for (let i = 0; i < datas.length; i++) {
-          if(datas[i].name.includes(input) && input) {
-            const div1 = document.createElement('div')
-            const a = document.createElement('span')
-            const span = document.createElement('span')
-            span.innerHTML = datas[i].name;
-            a.dataset.url = datas[i].url;
-            a.innerHTML = '获取资源'+ (datas[i].pan == 'bd' ? '(百度)' : '(夸克)');
-            a.style.marginLeft = '30px;'
-            a.style.color = 'red'
-            a.onclick = function() {
-              if(isMobile()) {
-                window.open(this.dataset.url)
-              }else{
-                const qrcodeBox = document.querySelector('.qrcode-box')
-                qrcodeBox.style.display = 'block'
-                getQrcode(this.dataset.url) 
-              }
+        for (let i = 0; i < list.length; i++) {
+          const div1 = document.createElement('div')
+          const a = document.createElement('span')
+          const span = document.createElement('span')
+          span.innerHTML = list[i].name;
+          a.dataset.url = list[i].url;
+          a.innerHTML = '获取资源'+ (list[i].pan == 'bd' ? '(百度)' : '(夸克)');
+          a.style.marginLeft = '30px;'
+          a.style.color = 'red'
+          a.onclick = function() {
+            if(isMobile()) {
+              window.open(this.dataset.url)
+            }else{
+              const qrcodeBox = document.querySelector('.qrcode-box')
+              qrcodeBox.style.display = 'block'
+              getQrcode(this.dataset.url) 
             }
-            div1.classList.add('item')
-            div1.style.color = 'rgb(88 48 48);'
-            div1.style.padding = '0px 10px';
-            div1.appendChild(span);
-            div1.appendChild(a);
-            div.appendChild(div1);
           }
-          if(!input) {
-            const div1 = document.createElement('div')
-            const a = document.createElement('span')
-            const span = document.createElement('span')
-            span.innerHTML = datas[i].name;
-            a.dataset.url = datas[i].url;
-            a.innerHTML = '获取资源'+ (datas[i].pan == 'bd' ? '(百度)' : '(夸克)');
-            a.style.marginLeft = '30px;'
-            a.style.color = 'red'
-            a.onclick = function() {
-              if(isMobile()) {
-                window.open(this.dataset.url)
-              }else{
-                const qrcodeBox = document.querySelector('.qrcode-box')
-                qrcodeBox.style.display = 'block'
-                getQrcode(this.dataset.url) 
-              }
-            }
-            div1.classList.add('item')
-            div1.style.color = 'rgb(88 48 48);'
-            div1.style.padding = '0px 10px';
-            div1.appendChild(span);
-            div1.appendChild(a);
-            div.appendChild(div1);
-          }
+          div1.classList.add('item')
+          div1.style.color = 'rgb(88 48 48);'
+          div1.style.padding = '0px 10px';
+          div1.appendChild(span);
+          div1.appendChild(a);
+          div.appendChild(div1);
         }
       }
 
@@ -154,6 +128,62 @@
 
       function isMobile() {
         return window.innerWidth <= 768;
+      }
+
+      /**
+       * 计算模糊匹配得分
+       * @param {string} str - 要匹配的字符串（如 name）
+       * @param {string} pattern - 搜索关键词
+       * @returns {number} 匹配得分，-1 表示不匹配
+       */
+      function fuzzyScore(str, pattern) {
+        const lowerStr = str.toLowerCase();
+        const lowerPattern = pattern.toLowerCase();
+        let score = 0;
+        let consecutive = 0; // 连续匹配字符计数
+        let matchIndex = -1; // 上一个匹配字符的位置
+
+        for (var i = 0, j = 0; i < lowerStr.length && j < lowerPattern.length; i++) {
+          if (lowerStr[i] === lowerPattern[j]) {
+            if (i === 0) score += 20;        // 首字母匹配大幅加分
+            else if (i === matchIndex + 1) {
+              consecutive++;                 // 连续字符匹配加分
+            } else {
+              score += 10;                   // 非连续但顺序匹配
+            }
+            j++;
+            matchIndex = i;
+          } else {
+            consecutive = 0; // 中断连续
+          }
+        }
+
+        // 如果所有 pattern 字符都匹配上了，返回总分；否则返回 -1
+        if (j !== lowerPattern.length) return -1;
+
+        score += consecutive * 5; // 连续匹配额外加分
+        return score;
+      }
+
+      /**
+       * 对 JSON 数组进行模糊搜索（基于指定字段）
+       * @param {Array<Object>} list - 对象数组
+       * @param {string} query - 搜索关键词
+       * @param {string} field - 要搜索的字段名（如 'name'）
+       * @returns {Array<Object>} 按匹配度排序的结果
+       */
+      function fuzzySearchJson(list, query, field = 'name') {
+        if (!query) return [...list]; // 无搜索词时返回全部
+
+        return list
+          .map(item => {
+            const value = item[field];
+            if (typeof value !== 'string') return { item, score: -1 };
+            return { item, score: fuzzyScore(value, query) };
+          })
+          .filter(result => result.score > -1)
+          .sort((a, b) => b.score - a.score) // 按得分降序
+          .map(result => result.item);       // 返回原始对象
       }
     </script>
 
