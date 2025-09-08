@@ -72,7 +72,7 @@
         const hot = data.filter(item => item.hot);
         const notHot = data.filter(item => !item.hot);
         datas = hot.concat(notHot.sort((a, b) => b.name.localeCompare(a.name)));
-        document.getElementById('total').innerHTML = `收藏总数(${datas.length}) &emsp; 资源缺失请+v(chui89520)添加`;
+        document.getElementById('total').innerHTML = `收藏总数(${datas.length}) &emsp; 资源缺失请+v(chui89520)`;
         showList(datas);
       });
 
