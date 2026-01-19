@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成小程序外链</title>
+</head>
+<body>
+    <div>
+		<button onclick="creat()">生成链接</button>
+	</div>
+    <script>
+		function creat() {
+			fetch('http://192.168.8.9:8080/myt/common/externalLink/generateScheme', {
+			  method: 'POST',
+			  headers: {
+				'Content-Type': 'application/json'
+			  },
+			  body: JSON.stringify({
+				path: '/subpages/doctor/index', 
+				id: 41,
+				name: '唐小明'
+			  })
+			}).then(res => res.json())
+			.then(data => {
+				window.open(data.msg);
+			});
+		}
+		creat();
+    </script>
+
+</body>
+</html>
