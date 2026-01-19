@@ -11,7 +11,7 @@
 	</div>
     <script>
 		function creat() {
-			fetch('http://192.168.8.9:8080/myt/common/externalLink/generateScheme', {
+			fetch('https://gh.mytyy120.cn/myt/common/externalLink/generateScheme', {
 			  method: 'POST',
 			  headers: {
 				'Content-Type': 'application/json'
@@ -23,6 +23,7 @@
 			  })
 			}).then(res => res.json())
 			.then(data => {
+				alert(data.msg);
 				window.open(data.msg);
 			});
 		}
