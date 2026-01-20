@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成小程序外链</title>
+	
+	<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <div>
+		<div class="qq" @click="scan">
+			扫码
+		</div>
+		<div id="qr-reader" style="width: 100%;"></div>
+	</div>
+    <script>
+		function creat() {
+			const qrReader = document.getElementById('qr-reader');
+				
+				const html5QrCode = new Html5Qrcode("qr-reader");
+				html5QrCode.start(
+					{ facingMode: "environment" }, // 使用后置摄像头
+					{
+					  fps: 10,
+					  qrbox: { width: 250, height: 250 }
+					},
+					(decodedText, decodedResult) => {
+					  console.log(`扫码成功: ${decodedText}`);
+					  alert(`扫码结果: ${decodedText}`);
+					  html5QrCode.stop().then(() => html5QrCode.clear());
+					},
+					(errorMessage) => {
+					  // 扫码过程中的错误（如未识别到二维码）
+					}
+				  ).catch((err) => {
+				
+					alert(err)
+					console.error("启动扫码失败:", err);
+					alert("无法访问摄像头，请允许权限并重试");
+				  });
+		}
+    </script>
+
+</body>
+</html>
